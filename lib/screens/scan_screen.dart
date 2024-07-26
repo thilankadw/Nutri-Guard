@@ -30,7 +30,7 @@ class _ScanScreenState extends State<ScanScreen> {
       ResolutionPreset.high,
     );
     _initializeControllerFuture = _cameraController.initialize();
-    setState(() {}); // Trigger a rebuild after initialization
+    setState(() {});
   }
 
   Future<void> _takePicture() async {
@@ -71,7 +71,7 @@ class _ScanScreenState extends State<ScanScreen> {
       }
     }
 
-    textRecognizer.close(); // Close the recognizer when done
+    textRecognizer.close();
 
     return text;
   }
@@ -80,8 +80,14 @@ class _ScanScreenState extends State<ScanScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Scan Product Label'),
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        title: Row(
+          children: [
+            Image.asset(
+              'assets/images/logoicon.png',
+              height: 50,
+            ),
+          ],
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -93,7 +99,17 @@ class _ScanScreenState extends State<ScanScreen> {
                   future: _initializeControllerFuture,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
-                      return CameraPreview(_cameraController);
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          child: Container(
+                            width: double.infinity,
+                            height: 500,
+                            child: CameraPreview(_cameraController),
+                          ),
+                        ),
+                      );
                     } else {
                       return const Center(child: CircularProgressIndicator());
                     }
